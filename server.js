@@ -2,7 +2,6 @@ const fs = require('fs');
 const tmp = require('tmp');
 const bodyParser = require('body-parser');
 const express = require('express');
-const fileUpload = require('express-fileupload');
 const CDP = require('chrome-remote-interface');
 
 const cdpHost = process.env.CHROME_HEADLESS_PORT_9222_TCP_ADDR || 'localhost';
@@ -47,13 +46,6 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(fileUpload());
-
-app.get('/', (req, res) => {
-	res.type('text/plain').send(`Here's a nice curl example of the api:
-curl -F "htmlFile=@test.html" -X POST -H "Content-Type: multipart/form-data" -o result.pdf http://thisurl/
-    `);
-});
 
 app.get('/health', (req, res) => {
 	try {
@@ -65,16 +57,17 @@ app.get('/health', (req, res) => {
 			if(err) {
 				throw err;
 			}
-		});
 
-		print(filename).then(pdf => {
-			var start = '%PDF-1.4';
-			if (pdf.toString('utf8', 0, start.length) == start) {
-		    	cleanupFiles(tmpDir, filename);
-			  	res.status(200).send('1');
-			  } else {
-				throw "invalid pdf";
-			  }
+			print(filename).then(pdf => {
+				var start = '%PDF-1.4';
+				if (pdf.toString('utf8', 0, start.length) == start) {
+					cleanupFiles(tmpDir, filename);
+					  res.status(200).send('1');
+				  } else {
+					throw "invalid pdf";
+				  }
+			});
+
 		});
 	} catch (e) {
 		cleanupFiles(tmpDir, filename);
@@ -86,25 +79,25 @@ app.get('/health', (req, res) => {
 
 app.post('/', async (req, res, next) => {
 	try {
-		const file = req.files.htmlFile;
-		if (!file) {
-			res.status(500).send('No htmlFile in request.');
+		if (typeof req.body.html === 'undefined') {
+			res.status(500).send('No html in request.');
 			throw err;
 		}
 
 		var tmpDir = tmp.dirSync();
 		var filename = tmpDir.name + "/index.html";
-
-		file.mv(filename, (err) => {
+		
+		var buf = Buffer.from(req.body.html, 'base64');
+		fs.writeFile(filename, buf.toString('utf8'), function(err) {
 			if(err) {
-				res.status(500).send('Error handling file.');
 				throw err;
 			}
-		
+
 			print(filename).then(pdf => {
 				res.status(200).type('application/pdf').send(pdf);
 				cleanupFiles(tmpDir, filename);
 			});
+			
 		});
 	} catch (e) {
 		cleanupFiles(tmpDir, filename);
