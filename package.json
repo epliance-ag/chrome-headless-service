@@ -4,19 +4,16 @@
   "description": "simple headless chrome-based print server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "cdp": "chrome-remote-interface inspect"
+    "start": "node server.js"
   },
-  "author": "Lyle Underwood <lyle.underwood@elasticsuite.com>",
+  "author": "Laurenz Gamper <laurenz.gamper@gmail.com>",
   "license": "MIT",
-  "repository": "ElasticSuite/chrome-print",
+  "repository": "laurenzgamper/chrome-print",
   "dependencies": {
     "body-parser": "^1.17.1",
     "chrome-remote-interface": "^0.22.0",
     "express": "^4.15.2",
     "express-fileupload": "^0.1.3",
-    "node-fs-extra": "^0.8.2",
-    "tempy": "^0.1.0"
+    "tmp": "0.0.33"
   }
 }
