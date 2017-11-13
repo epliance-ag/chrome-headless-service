@@ -1,0 +1,13 @@
+config:
+  target: 'http://localhost:8888'
+  phases:
+    - duration: 1000
+      arrivalRate: 27
+  processor: "./log.js"
+scenarios:
+  - flow:
+      - post:
+          url: "/"
+          json:
+            html: "PGh0bWw+PGJvZHk+SGVsbG8gV29ybGQhPC9ib2R5PjwvaHRtbD4="
+          afterResponse: "logStatus"
