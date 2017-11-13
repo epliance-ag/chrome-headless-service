@@ -11,10 +11,8 @@ WORKDIR /server
 ADD package.json /server/package.json
 RUN npm i
 
-ADD . /server
-WORKDIR /server
-
-RUN npm install
+ADD start.sh /server/start.sh
+ADD server.js /server/server.js
 
 EXPOSE 8888
 
