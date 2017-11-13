@@ -29,6 +29,7 @@ async function print (file) {
 		buffer = Buffer.from(data, 'base64');
 	} catch (err) {
 		console.error(err);
+		return null;
 	} finally {
 		if (client) {
 			await client.close();
@@ -94,8 +95,14 @@ app.post('/', async (req, res, next) => {
 			}
 
 			print(filename).then(pdf => {
-				res.status(200).type('application/pdf').send(pdf);
 				cleanupFiles(tmpDir, filename);
+				if (pdf !== null) {
+					res.status(200).type('application/pdf').send(pdf);
+				} else {
+					throw "got null pdf";
+				}
+			}).catch(err => {
+				res.status(500).send('Error creating pdf');
 			});
 			
 		});
