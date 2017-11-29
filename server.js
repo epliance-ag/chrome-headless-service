@@ -8,7 +8,7 @@ const cdpHost = process.env.CHROME_HEADLESS_PORT_9222_TCP_ADDR || 'localhost';
 const cdpPort = process.env.CHROME_HEADLESS_PORT_9222_TCP_PORT || '9222';
 
 async function print (file) {
-	var buffer = false;
+	var buffer = null;
 	try {
 		// connect to endpoint
 		var client = await CDP({host: cdpHost, port: cdpPort});
