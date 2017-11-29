@@ -1,5 +1,6 @@
 # multi-stage build new in Docker 17.05 (https://docs.docker.com/engine/userguide/eng-image/multistage-build/)
-FROM knqz/chrome-headless
+#replace chrome version number with most recent stable build
+FROM yukinying/chrome-headless-browser:62.0.3202.18
 FROM node:8
 
 # chrome dependencies
