@@ -7,7 +7,7 @@ const CDP = require('chrome-remote-interface');
 const cdpHost = process.env.CHROME_HEADLESS_PORT_9222_TCP_ADDR || 'localhost';
 const cdpPort = process.env.CHROME_HEADLESS_PORT_9222_TCP_PORT || '9222';
 
-async function print (file) {
+async function print (file, options) {
 	var buffer = null;
 	try {
 		// connect to endpoint
@@ -19,7 +19,7 @@ async function print (file) {
 		await Page.navigate({url: 'file://' + file});
 		await Page.loadEventFired();
 		const {data} = await Page.printToPDF({
-			landscape: false,
+			landscape: options.landscape,
 			printBackground: true,
 			marginTop: 0,
 			marginBottom: 0,
@@ -45,6 +45,7 @@ function cleanupFiles(tmpDir, filename) {
 
 const app = express();
 
+app.use(bodyParser({limit: '30mb'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -59,7 +60,7 @@ app.get('/health', (req, res) => {
 				throw err;
 			}
 
-			print(filename).then(pdf => {
+			print(filename, {}).then(pdf => {
 				var start = '%PDF-1.4';
 				if (pdf.toString('utf8', 0, start.length) == start) {
 					cleanupFiles(tmpDir, filename);
@@ -94,7 +95,17 @@ app.post('/', async (req, res, next) => {
 				throw err;
 			}
 
-			print(filename).then(pdf => {
+			var options = {
+				landscape: false,
+			};
+
+			if ("landscape" in req.body) {
+				if (req.body.landscape == true) {
+					options.landscape = true;
+				}
+			}
+
+			print(filename, options).then(pdf => {
 				cleanupFiles(tmpDir, filename);
 				if (pdf !== null) {
 					res.status(200).type('application/pdf').send(pdf);
