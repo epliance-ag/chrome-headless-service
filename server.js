@@ -64,7 +64,7 @@ app.get('/health', (req, res) => {
 				var start = '%PDF-1.4';
 				if (pdf.toString('utf8', 0, start.length) == start) {
 					cleanupFiles(tmpDir, filename);
-					  res.status(200).send('1');
+					  res.status(200).send('chrome_print_healthy 1');
 				  } else {
 					throw "invalid pdf";
 				  }
@@ -74,7 +74,7 @@ app.get('/health', (req, res) => {
 	} catch (e) {
 		cleanupFiles(tmpDir, filename);
 		console.log(e);
-		res.status(500).send('0');
+		res.status(500).send('chrome_print_healthy 0');
 		next(e)
 	};
 });
