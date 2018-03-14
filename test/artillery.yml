@@ -1,7 +1,7 @@
 config:
   target: 'http://localhost:8888'
   phases:
-    - duration: 1000
+    - duration: 300
       arrivalRate: 27
   processor: "./log.js"
 scenarios:
