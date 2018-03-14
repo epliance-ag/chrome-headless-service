@@ -11,18 +11,8 @@ docker-compose up
 
 ## Usage
 
-```bash
-# get the port the server is listening on
-port=`docker ps |grep chromeprint_print |sed 's/.*:\([0-9]*\)-.*/\1/'`
-
 # send the request
-curl \
-  -F "htmlFile=@test.html" \
-  -X POST \
-  -H "Content-Type: multipart/form-data" \
-  -o test.pdf \
-  http://localhost:$port/
-```
+curl -XPOST -H "Content-Type: application/json" -d @file.json http://localhost:8888 --output result.pdf
 
 ## Attribution
 
