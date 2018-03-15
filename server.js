@@ -3,7 +3,7 @@ const tmp = require('tmp');
 const bodyParser = require('body-parser');
 const express = require('express');
 const CDP = require('chrome-remote-interface');
-var stripJs = require('strip-js');
+const stripJs = require('strip-js');
 
 const cdpHost = process.env.CHROME_HEADLESS_PORT_9222_TCP_ADDR || 'localhost';
 const cdpPort = process.env.CHROME_HEADLESS_PORT_9222_TCP_PORT || '9222';
@@ -89,9 +89,8 @@ app.post('/', async (req, res, next) => {
 
 		var tmpDir = tmp.dirSync();
 		var filename = tmpDir.name + "/index.html";
-		
-		var buf = Buffer.from(stripJs(req.body.html), 'base64');
-		fs.writeFile(filename, buf.toString('utf8'), function(err) {
+		var html = Buffer.from(req.body.html, 'base64').toString();
+		fs.writeFile(filename, stripJs(html), function(err) {
 			if(err) {
 				throw err;
 			}
