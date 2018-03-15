@@ -1,0 +1,38 @@
+<HTML>
+
+<HEAD>
+
+<TITLE>Your Title Here</TITLE>
+
+</HEAD>
+
+<BODY BGCOLOR="FFFFFF" onload="setcolor('el2')" BACKGROUND="javascript:setcolor('el6')">
+
+<img src="javascript:setcolor('el3');">
+<IMG SRC=/ onerror="setcolor('el4')"></img>
+<IMG SRC="jav&#x09;ascript:setcolor('el5');">
+
+<span id="el1">Test1</span><br>
+<span id="el2">Test2</span><br>
+<span id="el3">Test3</span><br>
+<span id="el4">Test4</span><br>
+<span id="el5">Test5</span><br>
+<span id="el6">Test6</span><br>
+<span id="el7">Test7</span><br>
+<STYLE>li {list-style-image: url("javascript:setcolor('el7')");}</STYLE><UL><LI>XSS</br>
+</BODY>
+
+<script type="text/javascript">
+
+	function setcolor(elname) {
+		document.getElementById(elname).setAttribute("style", "color:red; border: 1px solid blue;");
+	}
+	document.addEventListener('readystatechange', function onReadyStateChange() {
+		if (document.readyState !== "complete")
+			return;
+		setcolor("el1");
+
+	}, false);
+</script>
+</HTML>
+
