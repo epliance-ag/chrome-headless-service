@@ -6,11 +6,11 @@
 
 </HEAD>
 
-<BODY BGCOLOR="FFFFFF" onload="setcolor('el2')" BACKGROUND="javascript:setcolor('el6')">
+<BODY BGCOLOR="FFFFFF" onload="document.getElementById('el2').setAttribute('style', 'color:red; border: 1px solid blue')" BACKGROUND="javascript:document.getElementById('el6').setAttribute('style', 'color:red; border: 1px solid blue')">
 
-<img src="javascript:setcolor('el3');">
-<IMG SRC=/ onerror="setcolor('el4')"></img>
-<IMG SRC="jav&#x09;ascript:setcolor('el5');">
+<img src="javascript:document.getElementById('el3').setAttribute('style', 'color:red; border: 1px solid blue')">
+<IMG SRC=/ onerror="document.getElementById('el4').setAttribute('style', 'color:red; border: 1px solid blue')"></img>
+<IMG SRC="jav&#x09;ascript:document.getElementById('el5').setAttribute('style', 'color:red; border: 1px solid blue')">
 
 <span id="el1">Test1</span><br>
 <span id="el2">Test2</span><br>
@@ -19,13 +19,13 @@
 <span id="el5">Test5</span><br>
 <span id="el6">Test6</span><br>
 <span id="el7">Test7</span><br>
-<STYLE>li {list-style-image: url("javascript:setcolor('el7')");}</STYLE><UL><LI>XSS</br>
+<STYLE>li {list-style-image: url("javascript:document.getElementById('el7').setAttribute('style', 'color:red; border: 1px solid blue')");}</STYLE><UL><LI>XSS</br>
 </BODY>
 
 <script type="text/javascript">
 
 	function setcolor(elname) {
-		document.getElementById(elname).setAttribute("style", "color:red; border: 1px solid blue;");
+		document.getElementById(elname).setAttribute('style', 'color:red; border: 1px solid blue');
 	}
 	document.addEventListener('readystatechange', function onReadyStateChange() {
 		if (document.readyState !== "complete")
