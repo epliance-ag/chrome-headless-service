@@ -3,10 +3,14 @@
 #wait until container booted
 SLEEPMAX=20
 SLEEPCNT=0
-until [ `curl -v http://127.0.0.1:8888/health` -p $SLEEPCNT -eq $MAXSLEEP ]
+curl http://127.0.0.1:8888/health &>/dev/null
+res=$?
+until [ $res -eq 0 ] || [ $SLEEPCNT -eq $MAXSLEEP ]
 do
     sleep 1
     SLEEPCNT=$SLEEPCNT+1
+    curl http://127.0.0.1:8888/health &>/dev/null
+    res=$?
 done
 
 echo -n '{"html":"' > test.json
