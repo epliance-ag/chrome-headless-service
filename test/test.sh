@@ -1,8 +1,13 @@
 #!/bin/bash
 
-sleep 20
-curl -v http://127.0.0.1:8888/health
-sudo netstat -peanut
+#wait until container booted
+SLEEPMAX=20
+SLEEPCNT=0
+until [ `curl -v http://127.0.0.1:8888/health` -p $SLEEPCNT -eq $MAXSLEEP ]
+do
+    sleep 1
+    SLEEPCNT=$SLEEPCNT+1
+done
 
 echo -n '{"html":"' > test.json
 base64 -w0 testhtml/simplepage.html >> test.json
