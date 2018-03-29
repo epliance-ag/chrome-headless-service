@@ -13,6 +13,8 @@ do
     res=$?
 done
 
+mkdir -p result
+
 echo -n '{"html":"' > test.json
 base64 -w0 testhtml/simplepage.html >> test.json
 echo -n '"}' >> test.json
