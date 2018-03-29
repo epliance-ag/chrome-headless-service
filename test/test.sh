@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sleep 20
 curl -v http://127.0.0.1:8888/health
 sudo netstat -peanut
 
