@@ -11,4 +11,5 @@ before_install:
   - docker ps -a
 
 script:
+  - docker ps -a
   - cd test && ./test.sh
