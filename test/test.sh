@@ -1,6 +1,7 @@
 #!/bin/bash
 
-curl http://127.0.0.1:8888/health
+curl -v http://127.0.0.1:8888/health
+sudo netstat -peanut
 
 echo -n '{"html":"' > test.json
 base64 -w0 testhtml/simplepage.html >> test.json
