@@ -35,7 +35,7 @@ async function print(files, fileCount, folder, options) {
 		await Promise.all([Network.enable(), Page.enable()]);
 		let filesToMerge = [];
 		for (let fileNr = 0; fileNr < fileCount; fileNr++) {
-			let page = await printPage(folder + '/index' + String(fileNr), Page, options);
+			let page = await printPage(folder + '/index' + String(fileNr) + '.html', Page, options);
 			fs.writeFileSync(folder + '/page' + String(fileNr), page);
 			filesToMerge.push(folder + '/page' + String(fileNr));
 		}
@@ -73,7 +73,7 @@ app.use(bodyParser.json());
 app.get('/health', (req, res) => {
 	try {
 		var tmpDir = tmp.dirSync();
-		var filename = tmpDir.name + "/index0";
+		var filename = tmpDir.name + "/index0.html";
 		var html = '<html><body>Hello World!</body></html>';
 
 		fs.writeFile(filename, html, function (err) {
@@ -125,14 +125,14 @@ app.post('/', async (req, res, next) => {
 			fileCount = req.body.html.length;
 			for (let i=0; i<fileCount; i++) {
 				var html = Buffer.from(req.body.html[i], 'base64').toString();
-				fs.writeFileSync(tmpDir.name + '/index' + String(i), stripJs(html));
-				filesToPrint.push(tmpDir.name + '/index' + String(i));	
+				fs.writeFileSync(tmpDir.name + '/index' + String(i) + '.html', stripJs(html));
+				filesToPrint.push(tmpDir.name + '/index' + String(i) + '.html');	
 			}
 		} else {
 			fileCount = 1;
 			var html = Buffer.from(req.body.html, 'base64').toString();
-			fs.writeFileSync(tmpDir.name + '/index0', stripJs(html));
-			filesToPrint.push(tmpDir.name + '/index0');	
+			fs.writeFileSync(tmpDir.name + '/index0.html', stripJs(html));
+			filesToPrint.push(tmpDir.name + '/index0.html');	
 		}
 
 		print(filesToPrint, fileCount, tmpDir.name, options).then(pdf => {
