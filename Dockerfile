@@ -3,7 +3,7 @@ FROM node:8-stretch
 #install chrome
 RUN apt-get update -qqy \
   && apt-get -qqy install \
-       dumb-init gnupg wget ca-certificates apt-transport-https \
+       dumb-init gnupg wget ca-certificates apt-transport-https pdftk \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \

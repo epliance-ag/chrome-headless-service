@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #wait until container booted
-SLEEPMAX=20
+MAXSLEEP=60
 SLEEPCNT=0
 curl http://127.0.0.1:8888/health &>/dev/null
 res=$?
-until [ $res -eq 0 ] || [ $SLEEPCNT -eq $MAXSLEEP ]
+until [ "$res" -eq 0 ] || [ "$SLEEPCNT" -eq "$MAXSLEEP" ]
 do
     sleep 1
-    SLEEPCNT=$SLEEPCNT+1
+    SLEEPCNT=$(($SLEEPCNT+1))
     curl http://127.0.0.1:8888/health &>/dev/null
     res=$?
 done
@@ -24,6 +24,25 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 ./diff.sh reference/simplepage.pdf result/simplepage.pdf
+if [ $? -ne 0 ]; then
+    echo "simplepage differs";
+    exit 1;
+fi
+
+echo -n '{"html":["' > test.json
+base64 -w0 testhtml/simplepage.html >> test.json
+echo -n '","' >> test.json
+base64 -w0 testhtml/stripjs.html >> test.json
+echo -n '","' >> test.json
+base64 -w0 testhtml/simplepage.html >> test.json
+echo -n '"]}' >> test.json
+
+curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/merge.pdf
+if [ $? -ne 0 ]; then
+    echo "could not create simplepage";
+    exit 1;
+fi
+./diff.sh reference/merge.pdf result/merge.pdf
 if [ $? -ne 0 ]; then
     echo "simplepage differs";
     exit 1;
