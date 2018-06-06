@@ -39,12 +39,12 @@ echo -n '"]}' >> test.json
 
 curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/merge.pdf
 if [ $? -ne 0 ]; then
-    echo "could not create simplepage";
+    echo "could not create merge";
     exit 1;
 fi
 ./diff.sh reference/merge.pdf result/merge.pdf
 if [ $? -ne 0 ]; then
-    echo "simplepage differs";
+    echo "merge differs";
     exit 1;
 fi
 
