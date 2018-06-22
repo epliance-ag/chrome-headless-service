@@ -11,8 +11,62 @@ docker-compose up
 
 ## Usage
 
-# send the request
+### Send the request
+```bash
 curl -XPOST -H "Content-Type: application/json" -d @file.json http://localhost:8888 --output result.pdf
+```
+
+### JSON File Format
+
+Simple Page with some HTML:
+
+```json
+{
+	"html": "< base64 encoded html string >"
+}
+```
+
+With the encoded String ``Hello <b>World</b>`` it looks like:
+
+```json
+{
+	"html": "SGVsbG8gPGI+V29ybGQ8L2I+"
+}
+
+```
+
+Landscape Pages:
+
+```json
+{
+	"landscape": true,
+	"html": "< base64 encoded html string >"
+}
+```
+
+With Header and Footer:
+
+```json
+{
+	"displayHeaderFooter": true,
+	"files": {
+		"html": "< base64 encoded html string >",
+		"header": "< base64 encoded html string >",
+		"footer": "< base64 encoded html string >"
+	}
+}
+```
+
+Multiple Pages:
+
+```json
+{
+	"html": [
+		"< base64 encoded html string >",
+		"< base64 encoded html string >"
+	]
+}
+```
 
 ## Attribution
 
