@@ -22,7 +22,7 @@ Simple Page with some HTML:
 
 ```json
 {
-	"html": "< base64 encoded html string >"
+	"files": "< base64 encoded html string >"
 }
 ```
 
@@ -30,7 +30,7 @@ With the encoded String ``Hello <b>World</b>`` it looks like:
 
 ```json
 {
-	"html": "SGVsbG8gPGI+V29ybGQ8L2I+"
+	"files": "SGVsbG8gPGI+V29ybGQ8L2I+"
 }
 
 ```
@@ -40,15 +40,21 @@ Landscape Pages:
 ```json
 {
 	"landscape": true,
-	"html": "< base64 encoded html string >"
+	"files": "< base64 encoded html string >"
 }
 ```
 
 With Header and Footer:
 
+Make sure the page has enough margin or the header and footer won't show up in the pdf.
+```css
+<style>
+@page{margin: 70px 0 40px; }
+</style>
+```
+
 ```json
 {
-	"displayHeaderFooter": true,
 	"files": {
 		"html": "< base64 encoded html string >",
 		"header": "< base64 encoded html string >",
@@ -61,10 +67,33 @@ Multiple Pages:
 
 ```json
 {
-	"html": [
+	"files": [
 		"< base64 encoded html string >",
 		"< base64 encoded html string >"
 	]
+}
+```
+
+Multiple Pages with Header and Footer:
+
+Make sure the page has enough margin or the header and footer won't show up in the pdf.
+```css
+<style>
+@page{margin: 70px 0 40px; }
+</style>
+```
+
+```json
+{
+	"files": [{
+		"html": "< base64 encoded html string >",
+		"header": "< base64 encoded html string >",
+		"footer": "< base64 encoded html string >"
+	},{
+		"html": "< base64 encoded html string >",
+		"header": "< base64 encoded html string >",
+		"footer": "< base64 encoded html string >"
+	}]
 }
 ```
 
