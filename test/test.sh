@@ -29,7 +29,7 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"displayHeaderFooter":true, "files":{"html":"' > test.json
+echo -n '{"files":{"html":"' > test.json
 base64 -w0 testhtml/headerfooter.html >> test.json
 echo -n '","header":"' >> test.json
 base64 -w0 testhtml/header.html >> test.json
@@ -47,14 +47,38 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"html":["' > test.json
+echo -n '{"files":[{"html":"' > test.json
+base64 -w0 testhtml/headerfooter.html >> test.json
+echo -n '","header":"' >> test.json
+base64 -w0 testhtml/header.html >> test.json
+echo -n '","footer":"' >> test.json
+base64 -w0 testhtml/footer.html >> test.json
+echo -n '"},' >> test.json
+echo -n '{"html":"' >> test.json
+base64 -w0 testhtml/headerfooter.html >> test.json
+echo -n '","header":"' >> test.json
+base64 -w0 testhtml/header.html >> test.json
+echo -n '","footer":"' >> test.json
+base64 -w0 testhtml/footer.html >> test.json
+echo -n '"}]}' >> test.json
+curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/mergeheaderfooter.pdf
+if [ $? -ne 0 ]; then
+    echo "could not create merge headerfooter";
+    exit 1;
+fi
+./diff.sh reference/mergeheaderfooter.pdf result/mergeheaderfooter.pdf
+if [ $? -ne 0 ]; then
+    echo "merge headerfooter";
+    exit 1;
+fi
+
+echo -n '{"files":["' > test.json
 base64 -w0 testhtml/simplepage.html >> test.json
 echo -n '","' >> test.json
 base64 -w0 testhtml/stripjs.html >> test.json
 echo -n '","' >> test.json
 base64 -w0 testhtml/simplepage.html >> test.json
 echo -n '"]}' >> test.json
-
 curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/merge.pdf
 if [ $? -ne 0 ]; then
     echo "could not create merge";
@@ -66,7 +90,7 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"html":"' > test.json
+echo -n '{"files":"' > test.json
 base64 -w0 testhtml/stripjs.html >> test.json
 echo -n '"}' >> test.json
 curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/stripjs.pdf
@@ -80,7 +104,7 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"landscape":true, "html":"' > test.json
+echo -n '{"landscape":true, "files":"' > test.json
 base64 -w0 testhtml/simplepage.html >> test.json
 echo -n '"}' >> test.json
 curl -XPOST --connect-timeout 1200 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/simplepagelandscape.pdf
@@ -94,7 +118,7 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"html":"' > test.json
+echo -n '{"files":"' > test.json
 base64 -w0 testhtml/hugetable.html >> test.json
 echo -n '"}' >> test.json
 curl -XPOST --connect-timeout 1200 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/hugetable.pdf

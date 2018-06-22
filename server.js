@@ -13,10 +13,14 @@ const cdpPort = process.env.CHROME_HEADLESS_PORT_9222_TCP_PORT || '9222';
 async function printPage(file, Page, options, header, footer) {
 	await Page.navigate({ url: 'file://' + file });
 	await Page.loadEventFired();
+	let displayHeaderFooter = false;
+	if (header != '' || footer != '') {
+		displayHeaderFooter = true;
+	}
 	const { data } = await Page.printToPDF({
 		format: 'A4',
 		landscape: options.landscape,
-        displayHeaderFooter: options.displayHeaderFooter,
+        displayHeaderFooter: displayHeaderFooter,
         headerTemplate: header,
         footerTemplate: footer,
 		printBackground: true,
@@ -77,12 +81,6 @@ function setOptions(body) {
 	if ("landscape" in body) {
 		if (body.landscape == true) {
 			options.landscape = true;
-		}
-	}
-
-	if ("displayHeaderFooter" in body) {
-		if (body.displayHeaderFooter == true) {
-			options.displayHeaderFooter = true;
 		}
 	}
 
