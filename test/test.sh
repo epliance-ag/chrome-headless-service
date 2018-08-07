@@ -47,6 +47,24 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
+echo -n '{"files":{"html":"' > test.json
+base64 -w0 testhtml/headerfooter.html >> test.json
+echo -n '","header":""' >> test.json
+echo -n ',"footer":"' >> test.json
+base64 -w0 testhtml/footer.html >> test.json
+echo -n '"}}' >> test.json
+cat test.json
+curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/onlyfooter.pdf
+if [ $? -ne 0 ]; then
+    echo "could not create onlyfooter";
+    exit 1;
+fi
+./diff.sh reference/onlyfooter.pdf result/onlyfooter.pdf
+if [ $? -ne 0 ]; then
+    echo "simplepage onlyfooter";
+    exit 1;
+fi
+
 echo -n '{"files":[{"html":"' > test.json
 base64 -w0 testhtml/headerfooter.html >> test.json
 echo -n '","header":"' >> test.json
@@ -115,33 +133,5 @@ fi
 ./diff.sh reference/simplepagelandscape.pdf result/simplepagelandscape.pdf
 if [ $? -ne 0 ]; then
     echo "simplepagelandscape differs";
-    exit 1;
-fi
-
-echo -n '{"files":"' > test.json
-base64 -w0 testhtml/hugetable.html >> test.json
-echo -n '"}' >> test.json
-curl -XPOST --connect-timeout 1200 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/hugetable.pdf
-if [ $? -ne 0 ]; then
-    echo "could not create hugetable";
-    exit 1;
-fi
-./diff.sh reference/hugetable.pdf result/hugetable.pdf
-if [ $? -ne 0 ]; then
-    echo "hugetable differs";
-    exit 1;
-fi
-
-echo -n '{"html":"' > test.json
-base64 -w0 testhtml/hugetext.html >> test.json
-echo -n '"}' >> test.json
-curl -XPOST --connect-timeout 1200 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/hugetext.pdf
-if [ $? -ne 0 ]; then
-    echo "could not create hugetext";
-    exit 1;
-fi
-./diff.sh reference/hugetext.pdf result/hugetext.pdf
-if [ $? -ne 0 ]; then
-    echo "hugetext differs";
     exit 1;
 fi

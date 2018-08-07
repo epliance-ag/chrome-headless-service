@@ -16,6 +16,12 @@ async function printPage(file, Page, options, header, footer) {
 	let displayHeaderFooter = false;
 	if (header != '' || footer != '') {
 		displayHeaderFooter = true;
+		if (header == '') {
+			header = ' ';
+		}
+		if (footer == '') {
+			footer = ' ';
+		}
 	}
 	const { data } = await Page.printToPDF({
 		format: 'A4',
