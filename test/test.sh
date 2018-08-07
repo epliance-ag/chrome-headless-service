@@ -53,7 +53,6 @@ echo -n '","header":""' >> test.json
 echo -n ',"footer":"' >> test.json
 base64 -w0 testhtml/footer.html >> test.json
 echo -n '"}}' >> test.json
-cat test.json
 curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/onlyfooter.pdf
 if [ $? -ne 0 ]; then
     echo "could not create onlyfooter";
