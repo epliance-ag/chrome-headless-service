@@ -47,6 +47,7 @@ async function print(files, folder, options) {
 		const { Network, Page } = client;
 		// enable events then start!
 		await Promise.all([Network.enable(), Page.enable()]);
+		await Network.setExtraHTTPHeaders({headers: { 'Content-Security-Policy': 'default-src ""' }});
 		let filesToMerge = [];
 		for (let fileNr = 0; fileNr < files.length; fileNr++) {
 			let page = await printPage(files[fileNr].filename, Page, options, files[fileNr].header, files[fileNr].footer);
