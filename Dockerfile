@@ -7,10 +7,16 @@ RUN apk update && apk upgrade \
     && apk add --no-cache \
     chromium@edge \
     nss@edge \
+    dumb-init@edge \
+    msttcorefonts-installer@edge \
+    fontconfig@edge \
+    pdftk@edge \
     && rm -rf /var/lib/apt/lists/* \
     /var/cache/apk/* \
     /usr/share/man \
-    /tmp/*
+    /tmp/* \
+    && update-ms-fonts \
+    && fc-cache -f
 
 # Add Chrome as a user
 RUN mkdir -p /server \
