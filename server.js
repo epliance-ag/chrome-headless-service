@@ -26,9 +26,9 @@ async function printPage(file, Page, options, header, footer) {
 	const { data } = await Page.printToPDF({
 		format: 'A4',
 		landscape: options.landscape,
-        displayHeaderFooter: displayHeaderFooter,
-        headerTemplate: header,
-        footerTemplate: footer,
+		displayHeaderFooter: displayHeaderFooter,
+		headerTemplate: header,
+		footerTemplate: footer,
 		printBackground: true,
 		marginTop: 0, 
 		marginBottom: 0, 
