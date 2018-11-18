@@ -2,3 +2,4 @@ node_modules/
 test/result/*
 test/pdfDiffDirectory/*
 test/test.json
+/.idea
