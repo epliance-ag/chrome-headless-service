@@ -43,7 +43,7 @@ if [ $? -ne 0 ]; then
 fi
 ./diff.sh reference/headerfooter.pdf result/headerfooter.pdf
 if [ $? -ne 0 ]; then
-    echo "simplepage headerfooter";
+    echo "headerfooter differs";
     exit 1;
 fi
 
@@ -60,7 +60,7 @@ if [ $? -ne 0 ]; then
 fi
 ./diff.sh reference/onlyfooter.pdf result/onlyfooter.pdf
 if [ $? -ne 0 ]; then
-    echo "simplepage onlyfooter";
+    echo "onlyfooter differs";
     exit 1;
 fi
 
@@ -85,7 +85,7 @@ if [ $? -ne 0 ]; then
 fi
 ./diff.sh reference/mergeheaderfooter.pdf result/mergeheaderfooter.pdf
 if [ $? -ne 0 ]; then
-    echo "merge headerfooter";
+    echo "mergeheaderfooter differs";
     exit 1;
 fi
 
