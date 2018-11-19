@@ -24,7 +24,8 @@ async function printPage(file, Page, options, header, footer) {
 		}
 	}
 	const { data } = await Page.printToPDF({
-		format: 'A4',
+		paperWidth: 8.27, // A4: 21cm
+		paperHeight: 11.69, // A4: 29.7cm
 		landscape: options.landscape,
 		displayHeaderFooter: displayHeaderFooter,
 		headerTemplate: header,
