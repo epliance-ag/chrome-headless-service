@@ -13,29 +13,36 @@ const cdpPort = process.env.CHROME_HEADLESS_PORT_9222_TCP_PORT || '9222';
 async function printPage(file, Page, options, header, footer) {
 	await Page.navigate({ url: 'file://' + file });
 	await Page.loadEventFired();
-	let displayHeaderFooter = false;
-	if (header != '' || footer != '') {
-		displayHeaderFooter = true;
-		if (header == '') {
-			header = ' ';
-		}
-		if (footer == '') {
-			footer = ' ';
-		}
-	}
-	const { data } = await Page.printToPDF({
+
+	let combinedOptions = {
 		paperWidth: 8.27, // A4: 21cm
 		paperHeight: 11.69, // A4: 29.7cm
-		landscape: options.landscape,
-		displayHeaderFooter: displayHeaderFooter,
 		headerTemplate: header,
 		footerTemplate: footer,
 		printBackground: true,
-		marginTop: 0, 
-		marginBottom: 0, 
-		marginLeft: 0, 
-		marginRight: 0 
-	});
+		marginTop: 0,
+		marginBottom: 0,
+		marginLeft: 0,
+		marginRight: 0
+	};
+
+	for (let key in options) {
+		if (options.hasOwnProperty(key)) {
+			combinedOptions[key] = options[key];
+		}
+	}
+
+	if (header != '' || footer != '') {
+		combinedOptions.displayHeaderFooter = true;
+		if (header == '') {
+			combinedOptions.headerTemplate = ' ';
+		}
+		if (footer == '') {
+			combinedOptions.footerTemplate = ' ';
+		}
+	}
+
+	const { data } = await Page.printToPDF(combinedOptions);
 	return Buffer.from(data, 'base64');
 }
 
@@ -81,10 +88,8 @@ function cleanupFiles(tmpDir) {
 }
 
 function setOptions(body) {
-	var options = {
-		landscape: false,
-		displayHeaderFooter: false
-	};
+	options = body.options;
+	options.displayHeaderFooter = false;
 
 	if ("landscape" in body) {
 		if (body.landscape == true) {
