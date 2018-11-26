@@ -39,7 +39,7 @@ Landscape Pages:
 
 ```json
 {
-	"landscape": true,
+	"options": {"landscape": true},
 	"files": "< base64 encoded html string >"
 }
 ```
