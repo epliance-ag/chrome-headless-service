@@ -121,7 +121,7 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"landscape":true, "files":"' > test.json
+echo -n '{"options": {"landscape":true}, "files":"' > test.json
 base64 -w0 testhtml/simplepage.html >> test.json
 echo -n '"}' >> test.json
 curl -XPOST --connect-timeout 1200 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/simplepagelandscape.pdf

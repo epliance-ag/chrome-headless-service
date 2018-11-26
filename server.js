@@ -88,7 +88,11 @@ function cleanupFiles(tmpDir) {
 }
 
 function setOptions(body) {
-	options = body.options;
+	if ("options" in body) {
+		options = body.options;
+	} else {
+		options = {};
+	}
 	options.displayHeaderFooter = false;
 
 	if ("landscape" in body) {
