@@ -1,12 +1,16 @@
-FROM ubuntu:bionic
+FROM debian:buster
+
+RUN echo "deb http://http.us.debian.org/debian stable main contrib non-free" >> /etc/apt/sources.list
+
 #install chrome
 RUN apt-get update -qqy \
-  && apt-get -qqy install dumb-init gnupg wget ca-certificates apt-transport-https nodejs npm software-properties-common \
+  && apt-get -qqy --no-install-recommends install dumb-init gnupg wget ca-certificates apt-transport-https \
+  && wget -q -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+  && echo 'deb https://deb.nodesource.com/node_8.x bionic main' > /etc/apt/sources.list.d/nodesource.list \
   && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-  && add-apt-repository -y ppa:malteworld/ppa \
   && apt-get update -qqy \
-  && apt-get -qqy install google-chrome-stable pdftk-java \
+  && apt-get -qqy --no-install-recommends install google-chrome-stable pdftk nodejs \
   && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections \
   && apt-get install -qqy ttf-mscorefonts-installer \
   && rm /etc/apt/sources.list.d/google-chrome.list \
