@@ -10,7 +10,7 @@ RUN apt-get update -qqy \
   && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install google-chrome-stable pdftk nodejs \
+  && apt-get -qqy --no-install-recommends install google-chrome-stable pdftk nodejs npm \
   && echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections \
   && apt-get install -qqy ttf-mscorefonts-installer \
   && rm /etc/apt/sources.list.d/google-chrome.list \
