@@ -52,9 +52,9 @@ async function screenshot(files, folder, options) {
 		console.error('error in screenshot function: ', err);
 		return null;
 	} finally {
-		//if (target.hasOwnProperty('id')) {
+		if (target.hasOwnProperty('id')) {
 			await CDP.Close({id: target.id});
-		//}
+		}
 		if (client) {
 			await client.close();
 		}
@@ -100,9 +100,12 @@ async function printPage(file, Page, options, header, footer) {
 
 async function print(files, folder, options) {
 	let data = null;
+	let target;
+	let client;
 	try {
 		// connect to endpoint
-		var client = await CDP({ host: cdpHost, port: cdpPort });
+		target = await CDP.New({ host: cdpHost, port: cdpPort });
+		client = await CDP({ host: cdpHost, port: cdpPort, target: target});
 		// extract domains
 		const { Network, Page } = client;
 		// enable events then start!
@@ -124,6 +127,9 @@ async function print(files, folder, options) {
 		console.error('error in print function: ', err);
 		return null;
 	} finally {
+		if (target.hasOwnProperty('id')) {
+			await CDP.Close({id: target.id});
+		}
 		if (client) {
 			await client.close();
 		}
