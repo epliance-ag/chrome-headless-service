@@ -134,3 +134,17 @@ if [ $? -ne 0 ]; then
     echo "simplepagelandscape differs";
     exit 1;
 fi
+
+echo -n '{"options": {"width":337,"height":1337}, "files":"' > test.json
+base64 -w0 testhtml/simplepage.html >> test.json
+echo -n '"}' >> test.json
+curl -XPOST --connect-timeout 1200 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888/screenshot --output result/screenshot.png
+if [ $? -ne 0 ]; then
+    echo "could not create screenshot";
+    exit 1;
+fi
+diff result/screenshot.png reference/screenshot.png
+if [ $? -ne 0 ]; then
+    echo "screenshot differs";
+    exit 1;
+fi

@@ -14,8 +14,8 @@ async function screenshot(files, folder, options) {
 	let data = null;
 
 	let deviceMetrics = {
-		width: 800,
-		height: 600,
+		width: 1920,
+		height: 1080,
 		deviceScaleFactor: 1,
 		mobile: false,
 		fitWindow: true,
@@ -301,7 +301,6 @@ app.post('/screenshot', async (req, res, next) => {
 
 		var tmpDir = tmp.dirSync();
 		let filesToPrint = prepareFiles(req.body.files, tmpDir.name);
-		console.log(tmpDir.name);
 
 		if (filesToPrint.length != 1) {
 			throw "need exactly 1 file for screenshots";
