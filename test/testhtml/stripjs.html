@@ -3,7 +3,9 @@
 <HEAD>
 
 <TITLE>Your Title Here</TITLE>
-
+	<style>
+		@page { margin: 70px 0 40px; }
+	</style>
 </HEAD>
 
 <BODY BGCOLOR="FFFFFF" onload="document.getElementById('el2').setAttribute('style', 'color:red; border: 1px solid blue')" BACKGROUND="javascript:document.getElementById('el6').setAttribute('style', 'color:red; border: 1px solid blue')">
@@ -31,6 +33,7 @@
 		if (document.readyState !== "complete")
 			return;
 		setcolor("el1");
+		setcolor("header1");
 
 	}, false);
 </script>

@@ -30,14 +30,14 @@ async function screenshot(files, folder, options) {
 	let target;
 	let client;
 	try {
-		// connect to endpoint
+		// create new tab
 		target = await CDP.New({ host: cdpHost, port: cdpPort });
+		//load client
 		client = await CDP({ host: cdpHost, port: cdpPort, target: target});
 		// extract domains
 		const { Emulation, Network, Page } = client;
-		// enable events then start!
+		// enable events then start
 		await Promise.all([Network.enable(), Page.enable()]);
-		await Network.setExtraHTTPHeaders({headers: { 'Content-Security-Policy': 'default-src ""' }});
 
 		await Page.navigate({ url: 'file://' + files[0].filename });
 		await Page.loadEventFired();
@@ -52,7 +52,7 @@ async function screenshot(files, folder, options) {
 		console.error('error in screenshot function: ', err);
 		return null;
 	} finally {
-		if (target.hasOwnProperty('id')) {
+		if (typeof target !== 'undefined' && target.hasOwnProperty('id')) {
 			await CDP.Close({id: target.id});
 		}
 		if (client) {
@@ -103,14 +103,14 @@ async function print(files, folder, options) {
 	let target;
 	let client;
 	try {
-		// connect to endpoint
+		// create new tab
 		target = await CDP.New({ host: cdpHost, port: cdpPort });
+		//load client
 		client = await CDP({ host: cdpHost, port: cdpPort, target: target});
 		// extract domains
 		const { Network, Page } = client;
-		// enable events then start!
+		// enable events then start
 		await Promise.all([Network.enable(), Page.enable()]);
-		await Network.setExtraHTTPHeaders({headers: { 'Content-Security-Policy': 'default-src ""' }});
 		let filesToMerge = [];
 		for (let fileNr = 0; fileNr < files.length; fileNr++) {
 			let page = await printPage(files[fileNr].filename, Page, options, files[fileNr].header, files[fileNr].footer);
@@ -127,7 +127,7 @@ async function print(files, folder, options) {
 		console.error('error in print function: ', err);
 		return null;
 	} finally {
-		if (target.hasOwnProperty('id')) {
+		if (typeof target !== 'undefined' && target.hasOwnProperty('id')) {
 			await CDP.Close({id: target.id});
 		}
 		if (client) {
@@ -166,19 +166,21 @@ function prepareFile(file, dirname, fileNr) {
 	let html = '';
 	let header = '';
 	let footer = '';
+	let csp = '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\' demo.webling.local; font-src \'self\' data: demo.weblig.local; img-src *;">';
 	if (util.isObject(file)) {
 		if ("html" in file) {
-			html = stripJs(Buffer.from(file.html, 'base64').toString());
+			html = Buffer.from(file.html, 'base64').toString();
+			html = insertContentSecurityPolicy(csp, html);
 		} else {
 			throw "no html in file";
 		}
 
 		if ("header" in file) {
-			header = stripJs(Buffer.from(file.header, 'base64').toString());
+			header = Buffer.from(file.header, 'base64').toString();
 		}
 
 		if ("footer" in file) {
-			footer = stripJs(Buffer.from(file.footer, 'base64').toString());
+			footer = Buffer.from(file.footer, 'base64').toString();
 		}
 		fs.writeFileSync(dirname + '/index' + String(fileNr) + '.html', html);
 		return {
@@ -187,7 +189,8 @@ function prepareFile(file, dirname, fileNr) {
 			footer: footer
 		};
 	} else {
-		html = stripJs(Buffer.from(file, 'base64').toString());
+		html = Buffer.from(file, 'base64').toString();
+		html = insertContentSecurityPolicy(csp, html);
 		fs.writeFileSync(dirname + '/index' + String(fileNr) + '.html', html);
 		return {
 			filename: dirname + '/index' + String(fileNr) + '.html',
@@ -204,9 +207,19 @@ function prepareFiles(files, dirname) {
 			filesToPrint.push(prepareFile(files[i], dirname, i));
 		}
 	} else {
-		filesToPrint.push(prepareFile(files, dirname));
+		filesToPrint.push(prepareFile(files, dirname, 0));
 	}
 	return filesToPrint;
+}
+
+function insertContentSecurityPolicy(policy, document) {
+	let headRegex = /<\s*head\s*>/i;
+	let match = headRegex.exec(document);
+	if (match) {
+		return document.substr(0, match.index+match[0].length) + policy + document.substr(match.index+match[0].length)
+	} else {
+		throw "document contains no head";
+	}
 }
 
 const app = express();

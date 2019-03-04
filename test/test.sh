@@ -89,21 +89,19 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi
 
-echo -n '{"files":["' > test.json
-base64 -w0 testhtml/simplepage.html >> test.json
-echo -n '","' >> test.json
+echo -n '{"files":{"html":"' > test.json
 base64 -w0 testhtml/stripjs.html >> test.json
-echo -n '","' >> test.json
-base64 -w0 testhtml/simplepage.html >> test.json
-echo -n '"]}' >> test.json
-curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/merge.pdf
+echo -n '","header":"' >> test.json
+base64 -w0 testhtml/stripjsheader.html >> test.json
+echo -n '"}}' >> test.json
+curl -XPOST --connect-timeout 600 -H "Content-Type: application/json" -d @test.json http://127.0.0.1:8888 --output result/stripjsheader.pdf
 if [ $? -ne 0 ]; then
-    echo "could not create merge";
+    echo "could not create stripjsheader";
     exit 1;
 fi
-./diff.sh reference/merge.pdf result/merge.pdf
+./diff.sh reference/stripjsheader.pdf result/stripjsheader.pdf
 if [ $? -ne 0 ]; then
-    echo "merge differs";
+    echo "stripjsheader differs";
     exit 1;
 fi
 

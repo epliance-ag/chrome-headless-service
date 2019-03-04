@@ -1,0 +1,34 @@
+<style type="text/css">
+    .pdfheader {
+      font-size: 10px;
+      width: 1000px;
+      text-align: center;
+      color: grey;
+      padding-left: 10px;
+      height: 300px;
+    }
+
+    </style>
+    
+    <div class="pdfheader">
+      <span>Fancy Header on Page </span>
+		<span id="header1">JS Test</span><br>
+		<div id="test">header test</div>
+		<img src='http://www.chromium.org/_/rsrc/1438879449147/config/customLogo.gif?revision=3' onload='document.getElementById("test").style.color = "green";this.parentNode.removeChild(this);'/>
+      <span class="pageNumber"></span> / <span class="totalPages"></span>
+      <br>
+      long<br>
+      header
+		<script type="text/javascript">
+
+			function setcolor(elname) {
+				document.getElementById(elname).setAttribute('style', 'color:red; border: 1px solid blue');
+			}
+			document.addEventListener('readystatechange', function onReadyStateChange() {
+				if (document.readyState !== "complete")
+					return;
+				setcolor("header1");
+
+			}, false);
+		</script>
+    </div>
