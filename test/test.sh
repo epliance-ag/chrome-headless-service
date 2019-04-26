@@ -143,10 +143,6 @@ if [ $? -ne 0 ]; then
 fi
 diff result/screenshot.png reference/screenshot.png
 if [ $? -ne 0 ]; then
-    md5sum result/screenshot.png
-    ls -l result/screenshot.png
-    head -n3 reference/screenshot.png
-    tail -n3 reference/screenshot.png
     echo "screenshot differs";
     exit 1;
 fi
