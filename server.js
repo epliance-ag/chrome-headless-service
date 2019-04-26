@@ -166,7 +166,7 @@ function prepareFile(file, dirname, fileNr) {
 	let html = '';
 	let header = '';
 	let footer = '';
-	let csp = '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; font-src \'self\' data: img-src * data:;">';
+	let csp = '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; font-src \'self\' data:; img-src * data:;">';
 	if (util.isObject(file)) {
 		if ("html" in file) {
 			html = Buffer.from(file.html, 'base64').toString();
