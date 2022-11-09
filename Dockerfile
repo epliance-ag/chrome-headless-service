@@ -16,6 +16,10 @@ RUN apt-get update -qqy \
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
+COPY ./additional-fonts/ /usr/local/fonts/
+
+RUN dpkg-reconfigure fontconfig-config
+
 RUN useradd headless --shell /bin/bash --create-home \
   && usermod -a -G sudo headless \
   && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
